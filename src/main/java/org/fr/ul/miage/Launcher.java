@@ -1,2 +1,4 @@
-package org.fr.ul.miage;public class Launcher {
+package org.fr.ul.miage;
+
+public class Launcher {
 }
