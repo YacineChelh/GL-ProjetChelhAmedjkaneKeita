@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class Client {
     Scanner scanner = new Scanner(System.in);
+    private Database database = new Database();
     String nom;
     String prenom;
     String mail;
@@ -12,6 +13,8 @@ public class Client {
     String numCarteCredit;
     String immatriculation;
 
+
+    //Inscription
     public Client() {
         System.out.println("Bonjour et bienvenue sur la page inscription. \nQuel est votre nom ?");
         String temp = scanner.next();
@@ -43,8 +46,13 @@ public class Client {
             temp=scanner.next();
             this.immatriculation=verifImma(temp);
         }
+
+        //Insertion dans la BDD
+        database.insertClient(nom, prenom, adresse, telephone, mail, numCarteCredit, immatriculation);
         System.out.println("Très bien. Inscription terminée. Bienvenue "+this.prenom);
     }
+
+
 
     public String verifReponse(String verif) {
         while (true) {
