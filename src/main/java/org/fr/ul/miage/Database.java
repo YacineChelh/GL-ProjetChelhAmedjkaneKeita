@@ -2,6 +2,7 @@ package org.fr.ul.miage;
 
 import java.sql.*;
 public class Database {
+    //TEST A FAIRE SUR DATABASE
     private Connection connection;
     private static final String URL = "jdbc:postgresql://localhost:5432/plg-broker.ad.univ-lorraine.fr"; //Adresse de la base dans pgadmin
     private static final String USER = "m1user1_07";

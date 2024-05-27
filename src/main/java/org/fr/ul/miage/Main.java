@@ -9,6 +9,7 @@ public class Main {
     public static void main(String[] args) {
 
         Client c = new Client();
+        c.inscription();
     }
 
     public static String verifTel(String verif) {
