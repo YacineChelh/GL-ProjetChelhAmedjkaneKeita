@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Client {
     Scanner scanner = new Scanner(System.in);
-    private Database database = new Database();
+
     String nom;
     String prenom;
     String mail;
@@ -117,4 +117,8 @@ public class Client {
     public boolean verifImma(String verif) {
         return verif.matches("[A-Z]{2}-[0-9]{3}-[A-Z]{2}");
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> recharge
