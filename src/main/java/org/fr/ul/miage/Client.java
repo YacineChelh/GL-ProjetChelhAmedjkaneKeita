@@ -117,8 +117,4 @@ public class Client {
     public boolean verifImma(String verif) {
         return verif.matches("[A-Z]{2}-[0-9]{3}-[A-Z]{2}");
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> recharge
