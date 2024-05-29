@@ -73,7 +73,7 @@ public class StationRecharge {
                             choixValide = true;
                             dureeValide = true;
                         } else {
-                            System.out.println("Veuillez entrer un nombre positif.");
+                            System.out.println("Veuillez entrer un nombre positif."); 
                         }
                     } else {
                         System.out.println("Veuillez entrer un nombre valide.");
