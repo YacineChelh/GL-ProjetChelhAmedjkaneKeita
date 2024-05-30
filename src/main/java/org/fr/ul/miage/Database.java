@@ -1,6 +1,9 @@
 package org.fr.ul.miage;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Database {
     //TEST A FAIRE SUR DATABASE
     private Connection connection;
@@ -62,24 +65,23 @@ public class Database {
 
     //Reservation
 
-    public void insertReservation(int numReservation, Timestamp debutReserv, Timestamp finReserv, String etatReservation, int idClient, int idFacturation) {
+    public void insertReservation(Timestamp debutReserv, Timestamp finReserv, String etatReservation, int idClient, int idFacturation) {
         int idBorne = getBorneDisponible(debutReserv, finReserv); // Récupérer une borne disponible pour le créneau spécifié
         if (idBorne == 0) {
             System.out.println("Aucune borne disponible pour le créneau spécifié. La réservation ne peut pas être effectuée.");
             return; // Sortir de la méthode si aucune borne disponible n'est trouvée
         }
 
-        String sql = "INSERT INTO Reservation (NumReservation, DebutReserv, FinReserv, EtatReservation, IdClient, IdBorne, IdFacturation) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Reservation (DebutReserv, FinReserv, EtatReservation, IdClient, IdBorne, IdFacturation) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, numReservation);
-            statement.setTimestamp(2, debutReserv);
-            statement.setTimestamp(3, finReserv);
-            statement.setString(4, etatReservation);
-            statement.setInt(5, idClient);
-            statement.setInt(6, idBorne); // Assigner l'ID de la borne disponible pour le créneau spécifié
-            statement.setInt(7, idFacturation);
+            statement.setTimestamp(1, debutReserv);
+            statement.setTimestamp(2, finReserv);
+            statement.setString(3, etatReservation);
+            statement.setInt(4, idClient);
+            statement.setInt(5, idBorne); // Assigner l'ID de la borne disponible pour le créneau spécifié
+            statement.setInt(6, idFacturation);
 
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
@@ -116,6 +118,39 @@ public class Database {
         return 0; // Retourne 0 s'il n'y a pas de borne disponible
     }
 
+
+    public List<Integer> getToutesLesBornesDisponibles(Timestamp debutreserv, Timestamp finreserv) {
+        List<Integer> bornesDisponibles = new ArrayList<>();
+        String sql = "SELECT IdBorne FROM Borne WHERE EtatBorne = 'Disponible' AND IdBorne NOT IN (SELECT IdBorne FROM Reservation WHERE (DebutReserv < ? AND FinReserv > ?) OR (DebutReserv < ? AND FinReserv > ?))";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setTimestamp(1, finreserv);
+            statement.setTimestamp(2, debutreserv);
+            statement.setTimestamp(3, debutreserv);
+            statement.setTimestamp(4, finreserv);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                bornesDisponibles.add(resultSet.getInt("IdBorne")); // Ajoute l'ID de chaque borne disponible à la liste
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la récupération des bornes disponibles pour le créneau : " + e.getMessage());
+        }
+
+        return bornesDisponibles; // Retourne la liste des bornes disponibles
+    }
+
+    public boolean existingImmatriculation(String imma){
+        boolean verif=true;
+
+        return verif;
+    }
+
+    public boolean existingnumTel(String tel){
+        boolean verif= true;
+
+        return verif;
+    }
 
 
 }
