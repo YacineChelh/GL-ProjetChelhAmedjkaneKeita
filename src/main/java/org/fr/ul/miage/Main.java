@@ -1,5 +1,6 @@
 package org.fr.ul.miage;
 
+import java.sql.Timestamp;
 import java.util.Scanner;
 
 public class Main {
@@ -7,6 +8,7 @@ public class Main {
     public static void main(String[] args) {
 
         Client c = new Client();
+
 
     }
 

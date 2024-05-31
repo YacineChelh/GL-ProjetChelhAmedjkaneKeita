@@ -3,7 +3,7 @@ package org.fr.ul.miage;
 import java.sql.*;
 public class Database {
     //TEST A FAIRE SUR DATABASE
-    private Connection connection;
+    private static Connection connection;
     private static final String URL = "jdbc:postgresql://localhost:5432/plg-broker.ad.univ-lorraine.fr"; //Adresse de la base dans pgadmin
     private static final String USER = "m1user1_07";
     private static final String PASSWORD = USER;
@@ -32,7 +32,7 @@ public class Database {
         }
     }
 
-    public Connection getConnection() {
+    public static Connection getConnection() {
         return connection;
     }
 
@@ -116,6 +116,6 @@ public class Database {
         return 0; // Retourne 0 s'il n'y a pas de borne disponible
     }
 
-
-
+    public void insertReservation(Reservation reservation) {
+    }
 }
