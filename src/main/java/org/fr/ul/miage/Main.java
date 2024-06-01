@@ -7,8 +7,9 @@ import java.util.Scanner;
 public class Main {
     static Scanner scanner = new Scanner (System.in);
     static Database database = new Database();
+    static Client client = new Client();
     public static void main(String[] args) {
-
+        client.inscription();
         menuPrincipal();
     }
 

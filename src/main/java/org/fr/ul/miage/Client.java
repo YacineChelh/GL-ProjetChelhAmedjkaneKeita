@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Client {
     static Scanner scanner = new Scanner(System.in);
-    private Database database = new Database();
+    private static Database database = new Database();
     String nom;
     String prenom;
     String mail;
@@ -17,7 +17,6 @@ public class Client {
 
     // Constructeur
     public Client() {
-        // Initialisation des champs si nécessaire
     }
 
     public Client(String nom, String prenom, String mail, String adresse, String telephone, String numCarteCredit) {
@@ -119,7 +118,7 @@ public class Client {
         }
         new Client(nom,prenom,mail,adresse,telephone,numCarteCredit,immatriculation);
         // Insertion dans la BDD
-        //database.insertClient(nom, prenom, adresse, telephone, mail, numCarteCredit, immatriculation);
+        database.insertClient(nom, prenom, adresse, telephone, mail, numCarteCredit, immatriculation);
         System.out.println("Très bien. Inscription terminée. Bienvenue " + prenom);
     }
 
