@@ -21,5 +21,4 @@ public class Reservation {
         this.idFacturation = idFacturation;
     }
 
-
 }

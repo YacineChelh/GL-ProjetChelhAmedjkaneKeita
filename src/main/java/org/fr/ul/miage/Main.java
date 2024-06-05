@@ -13,7 +13,6 @@ public class Main {
     static Database database = new Database();
     static Client client = new Client();
     public static void main(String[] args) {
-        //client.inscription();
         menuPrincipal();
     }
 
@@ -119,6 +118,7 @@ public class Main {
                     break;
                 case 2:
                     System.out.println("Vous avez choisi de consulter les réservations.");
+
                     System.out.println("Veuillez entrer votre numéro de téléphone : ");
 
                     do {

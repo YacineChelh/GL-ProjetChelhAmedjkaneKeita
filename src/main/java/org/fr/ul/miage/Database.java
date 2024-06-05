@@ -1,7 +1,6 @@
 package org.fr.ul.miage;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,6 +105,7 @@ public class Database {
         return bornesDisponibles;
     }
 
+    // Méthode pour récupérer toutes les bornes disponibles
 
     // Méthode pour vérifier si une immatriculation existe déjà
     // Méthode pour vérifier si une immatriculation existe déjà
