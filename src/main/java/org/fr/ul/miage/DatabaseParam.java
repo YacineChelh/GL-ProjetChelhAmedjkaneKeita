@@ -9,11 +9,15 @@ public class DatabaseParam {
     private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
     private static final String USER = "postgres";
     private static final String PASSWORD = "password";
+    private static Connection connection;
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
+    public static void setConnection(Connection connection) {
+        DatabaseParam.connection = connection;
+    }
 
     public static void main(String[] args) {
         try (Connection conn = getConnection();

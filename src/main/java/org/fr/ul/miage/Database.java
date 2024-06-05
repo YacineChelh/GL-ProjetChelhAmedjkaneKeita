@@ -1,6 +1,7 @@
 package org.fr.ul.miage;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,7 +80,10 @@ public class Database {
     // Méthode pour récupérer toutes les bornes disponibles
     public List<Integer> getToutesLesBornesDisponibles(Timestamp debutreserv, Timestamp finreserv) {
         List<Integer> bornesDisponibles = new ArrayList<>();
-        String sql = "SELECT IdBorne FROM Borne WHERE EtatBorne = 'Disponible' AND IdBorne NOT IN (SELECT IdBorne FROM Reservation WHERE (DebutReserv < ? AND FinReserv > ?) OR (DebutReserv < ? AND FinReserv > ?))";
+        String sql = "SELECT IdBorne FROM Borne WHERE EtatBorne = 'Disponible' AND IdBorne NOT IN (" +
+                "SELECT IdBorne FROM Reservation WHERE (DebutReserv < ? AND FinReserv > ?) OR (DebutReserv < ? AND FinReserv > ?) " +
+                "UNION " +
+                "SELECT IdBorne FROM Recharge WHERE (DebutRecharge < ? AND (DebutRecharge + INTERVAL '1 second' * DureeRecharge) > ?) OR (DebutRecharge < ? AND (DebutRecharge + INTERVAL '1 second' * DureeRecharge) > ?))";
 
         try (Connection connection = DatabaseParam.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -87,6 +91,10 @@ public class Database {
             statement.setTimestamp(2, debutreserv);
             statement.setTimestamp(3, debutreserv);
             statement.setTimestamp(4, finreserv);
+            statement.setTimestamp(5, finreserv);
+            statement.setTimestamp(6, debutreserv);
+            statement.setTimestamp(7, debutreserv);
+            statement.setTimestamp(8, finreserv);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 bornesDisponibles.add(resultSet.getInt("IdBorne"));
@@ -98,9 +106,11 @@ public class Database {
         return bornesDisponibles;
     }
 
+
     // Méthode pour vérifier si une immatriculation existe déjà
     // Méthode pour vérifier si une immatriculation existe déjà
     public boolean existingImmatriculation(String immatriculation) {
+        System.out.println("Vérification de l'immatriculation...");
         String sql = "SELECT COUNT(*) AS count FROM Client WHERE Immatriculation = ?";
         try (Connection connection = DatabaseParam.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -131,6 +141,38 @@ public class Database {
             System.err.println("Erreur lors de la vérification du numéro de téléphone existant : " + e.getMessage());
         }
         return false;
+    }
+
+    // Méthode pour récupérer toutes les réservations liées à un client avec un numéro de téléphone donné
+    public List<Reservation> getReservationsAvecNumTel(String phoneNumber) {
+        List<Reservation> reservations = new ArrayList<>();
+        String sql = "SELECT r.NumReservation, r.DebutReserv, r.FinReserv, r.EtatReservation, r.IdClient, r.IdBorne, r.IdFacturation " +
+                "FROM Reservation r " +
+                "JOIN Client c ON r.IdClient = c.IdClient " +
+                "WHERE c.Tel = ?";
+
+        try (Connection connection = DatabaseParam.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, phoneNumber);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Reservation reservation = new Reservation(
+                        resultSet.getInt("NumReservation"),
+                        resultSet.getTimestamp("DebutReserv"),
+                        resultSet.getTimestamp("FinReserv"),
+                        resultSet.getString("EtatReservation"),
+                        resultSet.getInt("IdClient"),
+                        resultSet.getInt("IdBorne"),
+                        resultSet.getInt("IdFacturation")
+                );
+                reservations.add(reservation);
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la récupération des réservations : " + e.getMessage());
+        }
+
+        return reservations;
     }
 
 }
