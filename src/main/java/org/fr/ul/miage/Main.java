@@ -74,6 +74,7 @@ public class Main {
                             if (database.existingImmatriculation(numImmaVerif)) {
                                 System.out.println("L'immatriculation saisie existe bien dans la base de données.");
                                 //TODO : Suite du process de recharge apres imma
+
                             } else {
                                 System.out.println("L'immatriculation saisie n'existe pas. Veuillez entrer un numéro de téléphone :");
                                 do {
