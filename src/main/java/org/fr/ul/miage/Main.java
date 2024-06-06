@@ -73,9 +73,18 @@ public class Main {
                             System.out.println("Verification du numéro d'immatriculation : " + numImmaVerif);
                             if (database.existingImmatriculation(numImmaVerif)) {
                                 System.out.println("L'immatriculation saisie existe bien dans la base de données.");
-                                //TODO : Suite du process de recharge apres imma
-
-                            } else {
+                                //TODO : Suite du process de recharge (insertion dans la table Recharge) apres imma
+                                // Demande de détails supplémentaires pour la recharge
+                                System.out.println("Veuillez saisir la date et l'heure de début de la recharge (format: YYYY-MM-DD HH:MM:SS) :");
+                                String debutRechargeStr = scanner.next() + " " + scanner.next();
+                                Timestamp debutRecharge = Timestamp.valueOf(debutRechargeStr);
+                                System.out.println("Veuillez saisir la durée de la recharge (en minutes) :");
+                                int dureeRecharge = scanner.nextInt();
+                                System.out.println("Veuillez saisir l'ID du client :");
+                                int idClient = scanner.nextInt();
+                                // Insertion des données de la recharge dans la base de données
+                                database.insertRecharge(debutRecharge, dureeRecharge, null, idClient, null);
+                            }else {
                                 System.out.println("L'immatriculation saisie n'existe pas. Veuillez entrer un numéro de téléphone :");
                                 do {
                                     numTel = scanner.next();
@@ -87,7 +96,16 @@ public class Main {
                                 System.out.println("Verification du numéro de téléphone : " + numTel);
                                 if (database.existingNumTel(numTel)) {
                                     System.out.println("Le numéro de téléphone saisie existe bien dans la base de données.");
-                                    // TODO : Suite du processus de recharge apres tel
+                                    // TODO : Suite du processus de recharge (insertion dans la table Recharge) apres tel
+                                    System.out.println("Veuillez saisir la date et l'heure de début de la recharge (format: YYYY-MM-DD HH:MM:SS) :");
+                                    String debutRechargeStr = scanner.next() + " " + scanner.next();
+                                    Timestamp debutRecharge = Timestamp.valueOf(debutRechargeStr);
+                                    System.out.println("Veuillez saisir la durée de la recharge (en minutes) :");
+                                    int dureeRecharge = scanner.nextInt();
+                                    System.out.println("Veuillez saisir l'ID du client :");
+                                    int idClient = scanner.nextInt();
+                                    // Insertion des données de la recharge dans la base de données
+                                    database.insertRecharge(debutRecharge, dureeRecharge, null, idClient, null);
                                 } else {
                                     System.out.println("Le numéro de téléphone saisie n'existe pas. Voulez-vous inscrire pour pouvoir continuer ?\n 1. OUI\n 2. NON");
 
