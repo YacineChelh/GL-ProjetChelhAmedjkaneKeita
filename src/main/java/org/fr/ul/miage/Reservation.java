@@ -10,13 +10,16 @@ public class Reservation {
     private static Map<String, Reservation> reservationsParImmatriculation = new HashMap<>();
     private static int nextNumReservation = 1; // Initialiser à 1 pour éviter les conflits avec des valeurs par défaut
 
-    private int numReservation;
     private String immatriculation;
-    private int idBorne;
-    private int idClient;
-    private Timestamp debutReserv;
-    private Timestamp finReserv;
     private String lastMessage;
+
+    public int numReservation;
+    public Timestamp debutReserv;
+    public Timestamp finReserv;
+    public String etatReservation;
+    public int idClient;
+    public int idBorne;
+    public int idFacturation;
 
     public enum EEtatReservation {
         Prolongée,
@@ -24,6 +27,16 @@ public class Reservation {
         Modifiée,
         Annulée,
         EnCours
+    }
+
+    public Reservation(int numReservation, Timestamp debutReserv, Timestamp finReserv, String etatReservation, int idClient, int idBorne, int idFacturation) {
+        this.numReservation = numReservation;
+        this.debutReserv = debutReserv;
+        this.finReserv = finReserv;
+        this.etatReservation = etatReservation;
+        this.idClient = idClient;
+        this.idBorne = idBorne;
+        this.idFacturation = idFacturation;
     }
 
     public Reservation(String immatriculation, int idBorne, int idClient, Timestamp debutReserv, Timestamp finReserv) {
@@ -73,78 +86,65 @@ public class Reservation {
 
     public static Timestamp demanderDate(String message) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println(message + " (Format: yyyy-mm-dd hh:mm:ss)");
-        String dateStr = scanner.nextLine();
-        return Timestamp.valueOf(dateStr);  // Conversion de la chaîne de caractères en Timestamp
+        Timestamp timestamp = null;
+        while (timestamp == null) {
+            try {
+                System.out.println(message + " (Format: yyyy-mm-dd hh:mm:ss)");
+                String dateStr = scanner.nextLine();
+                timestamp = Timestamp.valueOf(dateStr);  // Conversion de la chaîne de caractères en Timestamp
+            } catch (IllegalArgumentException e) {
+                System.out.println("Format de date invalide. Veuillez réessayer.");
+            }
+        }
+        return timestamp;
     }
+
 
     public static void demanderReservation() {
         Scanner scanner = new Scanner(System.in);
         boolean continuer = true;
 
         while (continuer) {
-            while (true) {
-                System.out.println("Voulez-vous effectuer une réservation ? (O/N)");
-                String reponse = scanner.nextLine().trim().toUpperCase();
+            System.out.println("Voulez-vous effectuer une réservation ? (O/N)");
+            String reponse = scanner.nextLine().trim().toUpperCase();
 
-                if (reponse.equals("O")) {
-                    while (true) {
-                        System.out.println("Voulez-vous utiliser le numéro de réservation ou le numéro d'immatriculation ? (R/I)");
-                        String choix = scanner.nextLine().trim().toUpperCase();
-
-                        if (choix.equals("R")) {
-                            while (true) {
-                                System.out.println("Entrez le numéro de réservation : ");
-                                String input = scanner.nextLine().trim();
-                                try {
-                                    int numReservation = Integer.parseInt(input);
-                                    Timestamp debutReserv = demanderDate("Entrez la date de début de réservation");
-                                    Timestamp finReserv = demanderDate("Entrez la date de fin de réservation");
-                                    Reservation.reserverBorne(numReservation, debutReserv, finReserv);
-                                    break;
-                                } catch (NumberFormatException e) {
-                                    System.out.println("Veuillez entrer un numéro de réservation valide.");
-                                }
-                            }
-                            break;
-                        } else if (choix.equals("I")) {
-                            while (true) {
-                                System.out.println("Entrez le numéro d'immatriculation : ");
-                                String immatriculation = scanner.nextLine().trim();
-                                if (!immatriculation.isEmpty()) {
-                                    Timestamp debutReserv = demanderDate("Entrez la date de début de réservation");
-                                    Timestamp finReserv = demanderDate("Entrez la date de fin de réservation");
-                                    Reservation.reserverBorne(immatriculation, debutReserv, finReserv);
-                                    break;
-                                } else {
-                                    System.out.println("Veuillez entrer un numéro d'immatriculation valide.");
-                                }
-                            }
-                            break;
-                        } else {
-                            System.out.println("Choix invalide. Veuillez répondre par 'R' pour numéro de réservation ou 'I' pour numéro d'immatriculation.");
-                        }
+            if (reponse.equals("O")) {
+                while (true) {
+                    System.out.println("Entrez le numéro d'immatriculation : ");
+                    String immatriculation = scanner.nextLine().trim();
+                    if (!immatriculation.isEmpty() && estImmatriculationValide(immatriculation)) {
+                        Timestamp debutReserv = demanderDate("Entrez la date de début de réservation");
+                        Timestamp finReserv = demanderDate("Entrez la date de fin de réservation");
+                        Reservation.reserverBorne(immatriculation, debutReserv, finReserv);
+                        break;
+                    } else {
+                        System.out.println("Numéro d'immatriculation invalide. Veuillez entrer un numéro d'immatriculation au format ABC-123.");
                     }
-                    break;
-                } else if (reponse.equals("N")) {
-                    System.out.println("Vous avez choisi de ne pas effectuer de réservation.");
-                    continuer = false;
-                    break;
-                } else {
-                    System.out.println("Réponse invalide. Veuillez répondre par 'O' pour Oui ou 'N' pour Non.");
                 }
-            }
 
-            if (continuer) {
-                System.out.println("Voulez-vous effectuer une autre réservation ? (O/N)");
-                String autreReservation = scanner.nextLine().trim().toUpperCase();
-                if (!autreReservation.equals("O")) {
-                    continuer = false;
-                    System.out.println("Merci et à bientôt !");
+                while (true) {
+                    System.out.println("Voulez-vous effectuer une autre réservation ? (O/N)");
+                    String autreReservation = scanner.nextLine().trim().toUpperCase();
+                    if (autreReservation.equals("O")) {
+                        break;
+                    } else if (autreReservation.equals("N")) {
+                        continuer = false;
+                        System.out.println("Merci et à bientôt !");
+                        break;
+                    } else {
+                        System.out.println("Réponse invalide. Veuillez répondre par 'O' pour Oui ou 'N' pour Non.");
+                    }
                 }
+            } else if (reponse.equals("N")) {
+                System.out.println("Vous avez choisi de ne pas effectuer de réservation.");
+                continuer = false;
+            } else {
+                System.out.println("Réponse invalide. Veuillez répondre par 'O' pour Oui ou 'N' pour Non.");
             }
         }
     }
+
+
 
     public int getNumReservation() {
         return numReservation;
@@ -174,11 +174,16 @@ public class Reservation {
         this.lastMessage = lastMessage;
     }
 
-    // New methods for testing purposes
+
     public static void clearReservations() {
         reservationsParNumero.clear();
         reservationsParImmatriculation.clear();
         nextNumReservation = 1;
+    }
+
+    public static boolean estImmatriculationValide(String immatriculation) {
+        String regex = "^[A-Z]{3}-\\d{3}$"; // Exemple de format ABC-123
+        return immatriculation.matches(regex);
     }
 
     public static int getReservationCount() {
