@@ -29,6 +29,50 @@ public class Database {
         }
     }
 
+
+    //Méthode pour insérer une réservation
+    public void insertReservation(Timestamp debutReserv, Timestamp finReserv, int idClient, int idBorne, int idFacturation) {
+        String sql = "INSERT INTO Reservation (DebutReserv, FinReserv, EtatReservation, IdClient, IdBorne, IdFacturation) VALUES (?, ?, ?, ?, ?, ?)";
+        try (Connection connection = DatabaseParam.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setTimestamp(1, debutReserv);
+            statement.setTimestamp(2, finReserv);
+            statement.setString(3, "Programmée");
+            statement.setInt(4, idClient);
+            statement.setInt(5, idBorne);
+            statement.setInt(6, idFacturation);
+
+            int rowsInserted = statement.executeUpdate();
+            if (rowsInserted > 0) {
+                System.out.println("Réservation ajoutée avec succès à la base de données.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de l'insertion de la réservation dans la base de données : " + e.getMessage());
+        }
+    }
+
+
+    //Méthode pour insérer une recharge
+    public void insertRecharge(Timestamp debutRecharge, int dureeRecharge, int idBorne, int idClient, int idFacturation) {
+        String sql = "INSERT INTO Recharge (DebutRecharge, DureeRecharge, IdBorne, IdClient, IdFacturation) VALUES (?, ?, ?, ?, ?)";
+        try (Connection connection = DatabaseParam.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setTimestamp(1, debutRecharge);
+            statement.setInt(2, dureeRecharge);
+            statement.setInt(3, idBorne);
+            statement.setInt(4, idClient);
+            statement.setInt(5, idFacturation);
+
+            int rowsInserted = statement.executeUpdate();
+            if (rowsInserted > 0) {
+                System.out.println("Recharge ajoutée avec succès à la base de données.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de l'insertion de la recharge dans la base de données : " + e.getMessage());
+        }
+    }
+
+
     // Méthode pour insérer une réservation dans la base de données
     public void insertReservation(Timestamp debutReserv, Timestamp finReserv, String etatReservation, int idClient, int idFacturation) {
         String sql = "INSERT INTO Reservation (DebutReserv, FinReserv, EtatReservation, IdClient, IdBorne, IdFacturation) VALUES (?, ?, ?, ?, ?, ?)";

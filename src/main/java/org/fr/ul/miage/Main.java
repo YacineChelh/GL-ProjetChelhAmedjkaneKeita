@@ -10,7 +10,8 @@ public class Main {
     static Database database = new Database();
     static Client client = new Client();
     public static void main(String[] args) {
-        menuPrincipal();
+        Reservation.demanderReservation();
+        //menuPrincipal();
     }
 
     public static void menuPrincipal() {
@@ -73,7 +74,8 @@ public class Main {
                             System.out.println("Verification du numéro d'immatriculation : " + numImmaVerif);
                             if (database.existingImmatriculation(numImmaVerif)) {
                                 System.out.println("L'immatriculation saisie existe bien dans la base de données.");
-                                //TODO : Suite du process de recharge apres imma
+                                //TODO : Suite du process de recharge (insertion dans la table Recharge) apres imma
+
                             } else {
                                 System.out.println("L'immatriculation saisie n'existe pas. Veuillez entrer un numéro de téléphone :");
                                 do {
@@ -86,7 +88,7 @@ public class Main {
                                 System.out.println("Verification du numéro de téléphone : " + numTel);
                                 if (database.existingNumTel(numTel)) {
                                     System.out.println("Le numéro de téléphone saisie existe bien dans la base de données.");
-                                    // TODO : Suite du processus de recharge apres tel
+                                    // TODO : Suite du processus de recharge (insertion dans la table Recharge) apres tel
                                 } else {
                                     System.out.println("Le numéro de téléphone saisie n'existe pas. Voulez-vous inscrire pour pouvoir continuer ?\n 1. OUI\n 2. NON");
 
