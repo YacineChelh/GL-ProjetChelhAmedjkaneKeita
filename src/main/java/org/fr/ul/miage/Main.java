@@ -73,8 +73,6 @@ public class Main {
                             System.out.println("Verification du numéro d'immatriculation : " + numImmaVerif);
                             if (database.existingImmatriculation(numImmaVerif)) {
                                 System.out.println("L'immatriculation saisie existe bien dans la base de données.");
-                                //TODO : Suite du process de recharge (insertion dans la table Recharge) apres imma
-                                // Demande de détails supplémentaires pour la recharge
                                 System.out.println("Veuillez saisir la date et l'heure de début de la recharge (format: YYYY-MM-DD HH:MM:SS) :");
                                 String debutRechargeStr = scanner.next() + " " + scanner.next();
                                 Timestamp debutRecharge = Timestamp.valueOf(debutRechargeStr);
@@ -96,7 +94,6 @@ public class Main {
                                 System.out.println("Verification du numéro de téléphone : " + numTel);
                                 if (database.existingNumTel(numTel)) {
                                     System.out.println("Le numéro de téléphone saisie existe bien dans la base de données.");
-                                    // TODO : Suite du processus de recharge (insertion dans la table Recharge) apres tel
                                     System.out.println("Veuillez saisir la date et l'heure de début de la recharge (format: YYYY-MM-DD HH:MM:SS) :");
                                     String debutRechargeStr = scanner.next() + " " + scanner.next();
                                     Timestamp debutRecharge = Timestamp.valueOf(debutRechargeStr);

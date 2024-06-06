@@ -162,7 +162,6 @@ public class Database {
     // Méthode pour récupérer toutes les bornes disponibles
 
     // Méthode pour vérifier si une immatriculation existe déjà
-    // Méthode pour vérifier si une immatriculation existe déjà
     public boolean existingImmatriculation(String immatriculation) {
         System.out.println("Vérification de l'immatriculation...");
         String sql = "SELECT COUNT(*) AS count FROM Client WHERE Immatriculation = ?";
