@@ -1,10 +1,13 @@
 package org.fr.ul.miage;
 
+import java.sql.Timestamp;
+import java.util.List;
 import java.util.Scanner;
 
 public class Client {
-    Scanner scanner = new Scanner(System.in);
 
+    static Scanner scanner = new Scanner(System.in);
+    private static Database database = new Database();
     String nom;
     String prenom;
     String mail;
@@ -15,18 +18,48 @@ public class Client {
 
     // Constructeur
     public Client() {
-        // Initialisation des champs si nécessaire
+    }
+
+    public Client(String nom, String prenom, String mail, String adresse, String telephone, String numCarteCredit) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.mail = mail;
+        this.adresse = adresse;
+        this.telephone=telephone;
+        this.numCarteCredit=numCarteCredit;
+
+    }
+
+    public Client(String nom, String prenom, String mail, String adresse, String telephone, String numCarteCredit, String immatriculation) {
+        if(immatriculation != null) {
+            this.nom = nom;
+            this.prenom = prenom;
+            this.mail = mail;
+            this.adresse = adresse;
+            this.telephone = telephone;
+            this.numCarteCredit = numCarteCredit;
+            this.immatriculation = immatriculation;
+        }else{
+            new Client(nom,prenom,mail,adresse,telephone,numCarteCredit);
+        }
     }
 
     // Méthode d'inscription
-    public void inscription() {
+    public static void inscription() {
+        String nom;
+        String prenom;
+        String mail;
+        String adresse;
+        String telephone;
+        String numCarteCredit;
+        String immatriculation = null;
         System.out.println("Bonjour et bienvenue sur la page inscription. \nQuel est votre nom ?");
         String temp = scanner.next();
         while (!verifNomPrenom(temp)) {
             System.out.println("Nom invalide. Quel est votre nom ?");
             temp = scanner.next();
         }
-        this.nom = temp;
+        nom = temp;
 
         System.out.println("Ensuite, quel est votre prénom ?");
         temp = scanner.next();
@@ -34,7 +67,7 @@ public class Client {
             System.out.println("Prénom invalide. Quel est votre prénom ?");
             temp = scanner.next();
         }
-        this.prenom = temp;
+        prenom = temp;
 
         System.out.println("Quel est votre adresse ?");
         temp = scanner.next();
@@ -42,7 +75,7 @@ public class Client {
             System.out.println("Adresse invalide. Quel est votre adresse ?");
             temp = scanner.next();
         }
-        this.adresse = temp;
+        adresse = temp;
 
         System.out.println("Quel est votre numéro de téléphone ?");
         temp = scanner.next();
@@ -50,7 +83,7 @@ public class Client {
             System.out.println("Numéro de téléphone invalide. Quel est votre numéro de téléphone ?");
             temp = scanner.next();
         }
-        this.telephone = temp;
+        telephone = temp;
 
         System.out.println("Quelle est votre adresse mail ?");
         temp = scanner.next();
@@ -58,7 +91,7 @@ public class Client {
             System.out.println("Adresse mail invalide. Quelle est votre adresse mail ?");
             temp = scanner.next();
         }
-        this.mail = temp;
+        mail = temp;
 
         System.out.println("Quel est votre numéro de carte de crédit ?");
         temp = scanner.next();
@@ -66,7 +99,7 @@ public class Client {
             System.out.println("Numéro de carte de crédit invalide. Quel est votre numéro de carte de crédit ?");
             temp = scanner.next();
         }
-        this.numCarteCredit = temp;
+        numCarteCredit = temp;
 
         System.out.println("Avez-vous un véhicule ? O/N");
         String reponse = scanner.next();
@@ -82,39 +115,48 @@ public class Client {
                 System.out.println("Immatriculation invalide. Veuillez entrer l'immatriculation de votre véhicule (ex : AB-123-CD) :");
                 temp = scanner.next();
             }
-            this.immatriculation = temp;
+            immatriculation = temp;
         }
-
+        new Client(nom,prenom,mail,adresse,telephone,numCarteCredit,immatriculation);
         // Insertion dans la BDD
-        //database.insertClient(nom, prenom, adresse, telephone, mail, numCarteCredit, immatriculation);
-        System.out.println("Très bien. Inscription terminée. Bienvenue " + this.prenom);
+        database.insertClient(nom, prenom, adresse, telephone, mail, numCarteCredit, immatriculation);
+        System.out.println("Très bien. Inscription terminée. Bienvenue " + prenom);
     }
 
-    public boolean verifReponse(String verif) {
+    public static boolean verifReponse(String verif) {
         return verif.equalsIgnoreCase("O") || verif.equalsIgnoreCase("N");
     }
 
-    public boolean verifNomPrenom(String verif) {
+    public static boolean verifNomPrenom(String verif) {
         return verif.length() > 0 && verif.matches("[a-zA-Z]+(\\s[a-zA-Z]+)*");
     }
 
-    public boolean verifAdresse(String verif) {
+    public static boolean verifAdresse(String verif) {
         return verif.length() >= 5 && verif.length() <= 100 && verif.matches("[\\w\\s\\d.,'-]+");
     }
 
-    public boolean verifTel(String verif) {
+    public static boolean verifTel(String verif) {
         return verif.matches("^(0)[0-9]{9}$");
     }
 
-    public boolean verifMail(String verif) {
+    public static boolean verifMail(String verif) {
         return verif.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]+$");
     }
 
-    public boolean verifCarte(String verif) {
+    public static boolean verifCarte(String verif) {
         return verif.length() == 16 && verif.matches("[0-9]+");
     }
 
-    public boolean verifImma(String verif) {
+    public static boolean verifImma(String verif) {
         return verif.matches("[A-Z]{2}-[0-9]{3}-[A-Z]{2}");
+    }
+
+
+    public void verificationBorneDisponible(Timestamp debut, Timestamp fin){
+        List<Integer> listeBorneDisponible = database.getToutesLesBornesDisponibles(debut,fin);
+        System.out.println("Liste des bornes disponibles : ");
+        for(int i = 0; i<listeBorneDisponible.size();i++){
+            System.out.println("- Borne "+(listeBorneDisponible.get(i)));
+        }
     }
 }

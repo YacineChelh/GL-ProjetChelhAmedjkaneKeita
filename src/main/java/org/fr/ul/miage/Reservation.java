@@ -10,13 +10,16 @@ public class Reservation {
     private static Map<String, Reservation> reservationsParImmatriculation = new HashMap<>();
     private static int nextNumReservation = 1; // Initialiser à 1 pour éviter les conflits avec des valeurs par défaut
 
-    private int numReservation;
     private String immatriculation;
-    private int idBorne;
-    private int idClient;
-    private Timestamp debutReserv;
-    private Timestamp finReserv;
     private String lastMessage;
+
+    public int numReservation;
+    public Timestamp debutReserv;
+    public Timestamp finReserv;
+    public String etatReservation;
+    public int idClient;
+    public int idBorne;
+    public int idFacturation;
 
     public enum EEtatReservation {
         Prolongée,
@@ -24,6 +27,16 @@ public class Reservation {
         Modifiée,
         Annulée,
         EnCours
+    }
+
+    public Reservation(int numReservation, Timestamp debutReserv, Timestamp finReserv, String etatReservation, int idClient, int idBorne, int idFacturation) {
+        this.numReservation = numReservation;
+        this.debutReserv = debutReserv;
+        this.finReserv = finReserv;
+        this.etatReservation = etatReservation;
+        this.idClient = idClient;
+        this.idBorne = idBorne;
+        this.idFacturation = idFacturation;
     }
 
     public Reservation(String immatriculation, int idBorne, int idClient, Timestamp debutReserv, Timestamp finReserv) {
