@@ -189,25 +189,22 @@ public class Main {
                     break;
 
                 case 6:
-                    // Faire une réservation
                     System.out.println("Vous avez choisi de faire une réservation.");
 
-                    // Demander à l'utilisateur de saisir l'immatriculation du véhicule
+                   
                     System.out.println("Entrez le numéro d'immatriculation du véhicule (Exemple: ABC-123) : ");
                     String immatriculation = scanner.next();
 
-                    // Demander à l'utilisateur de saisir la date de début de réservation
+                   
                     System.out.println("Entrez la date de début de réservation : ");
                     Timestamp debutReserv = Reservation.demanderDate("Entrez la date de début de réservation");
 
-                    // Demander à l'utilisateur de saisir la date de fin de réservation
+                    
                     System.out.println("Entrez la date de fin de réservation : ");
                     Timestamp finReserv = Reservation.demanderDate("Entrez la date de fin de réservation");
 
-                    // Insérer la réservation dans la base de données
                     database.insertReservation(debutReserv, finReserv, null,null,null,null);
-
-                    // Afficher un message de confirmation
+                   
                     System.out.println("Réservation ajoutée avec succès à la base de données.");
                     break;
 
