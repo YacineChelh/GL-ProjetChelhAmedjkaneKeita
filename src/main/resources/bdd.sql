@@ -1,6 +1,6 @@
 
 -- Enumérations
-CREATE TYPE EEtatReservation AS ENUM ('Prolongée', 'Terminée', 'Modifiée', 'Annulée', 'En cours');
+CREATE TYPE EEtatReservation AS ENUM ('Prolongée', 'Terminée', 'Modifiée', 'Annulée', 'En cours', 'Programmée');
 CREATE TYPE EEtatBorne AS ENUM ('Disponible', 'Indisponible', 'Réservée', 'Occupée');
 
 -- Table Client
@@ -51,6 +51,7 @@ CREATE TABLE Reservation (
     FOREIGN KEY (IdBorne) REFERENCES Borne(IdBorne)
 );
 
+
 -- Table Recharge
 CREATE TABLE Recharge (
     IdRecharge SERIAL PRIMARY KEY,
@@ -74,3 +75,19 @@ CREATE TABLE Facturation (
     FOREIGN KEY (IdClient) REFERENCES Client(IdClient),
     FOREIGN KEY (IdRecharge) REFERENCES Recharge(IdRecharge)
 );
+
+
+-- Insertion dans la base de données manuelle des bornes
+INSERT INTO Borne (EtatBorne, DureeTotal, DureeRestante)
+VALUES ('Disponible', 0, 0),
+       ('Disponible', 0, 0),
+       ('Disponible', 0, 0),
+       ('Disponible', 0, 0),
+       ('Disponible', 0, 0);
+
+SELECT * FROM Borne;
+SELECT * FROM Client;
+SELECT * FROM Reservation;
+
+INSERT INTO Reservation (DebutReserv, FinReserv, EtatReservation, IdClient, IdBorne)
+VALUES ('2024-06-06 10:00:00', '2024-06-06 12:00:00', 'En cours', 1, 3);
