@@ -80,7 +80,7 @@ public class Main {
                                 int dureeRecharge = scanner.nextInt();
                                 System.out.println("Veuillez saisir l'ID du client :");
                                 int idClient = scanner.nextInt();
-                                // Insertion des données de la recharge dans la base de données
+                                // Insertion des données de la recharge  dans la base de données
                                 database.insertRecharge(debutRecharge, dureeRecharge, null, idClient, null);
                             }else {
                                 System.out.println("L'immatriculation saisie n'existe pas. Veuillez entrer un numéro de téléphone :");

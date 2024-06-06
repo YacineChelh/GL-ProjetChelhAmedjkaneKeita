@@ -159,7 +159,7 @@ public class Database {
         return bornesDisponibles;
     }
 
-    // Méthode pour récupérer toutes les bornes disponibles
+    // Méthode  pour récupérer toutes les bornes disponibles
 
     // Méthode pour vérifier si une immatriculation existe déjà
     public boolean existingImmatriculation(String immatriculation) {
